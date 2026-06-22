@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>R TO B 校园绿色循环平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#22C55E',
+            mint: '#DCFCE7',
+            accent: '#F59E0B',
+            deep: '#14532D',
+            ink: '#0F172A'
+          },
+          boxShadow: {
+            soft: '0 12px 32px rgba(34, 197, 94, 0.12)',
+            card: '0 8px 24px rgba(15, 23, 42, 0.08)'
+          },
+          borderRadius: {
+            card: '16px',
+            pill: '9999px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+    }
+    html, body {
+      background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 24%),
+        linear-gradient(180deg, #f7fff9 0%, #ffffff 45%, #f7fbf8 100%);
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .glass {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .noise {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        radial-gradient(circle at 20% 20%, rgba(34,197,94,0.12), transparent 0 42px),
+        radial-gradient(circle at 80% 10%, rgba(245,158,11,0.14), transparent 0 30px),
+        radial-gradient(circle at 50% 80%, rgba(34,197,94,0.08), transparent 0 50px);
+    }
+    .tab-active {
+      color: #22C55E;
+      background: linear-gradient(180deg, rgba(34,197,94,0.18), rgba(34,197,94,0.08));
+    }
+    .pulse-dot {
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.42);
+      animation: pulse 2.2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.42); }
+      70% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+    .fade-in {
+      animation: fadeInUp .7s ease both;
+    }
+    .delay-1 { animation-delay: .08s; }
+    .delay-2 { animation-delay: .16s; }
+    .delay-3 { animation-delay: .24s; }
+    .delay-4 { animation-delay: .32s; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="text-slate-800">
+  <main class="mx-auto min-h-screen max-w-[430px] pb-40">
+    <section class="relative overflow-hidden px-4 pt-5">
+      <div class="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-brand/15 to-transparent"></div>
+      <div class="relative space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-medium text-brand">R TO B</p>
+            <h1 class="mt-1 text-[24px] font-semibold tracking-tight text-ink">Recycle To Buy</h1>
+          </div>
+          <div class="glass rounded-card border border-white/70 bg-white/75 px-3 py-2 shadow-card">
+            <div class="flex items-center gap-2">
+              <span class="pulse-dot h-2.5 w-2.5 rounded-full bg-accent"></span>
+              <span class="text-xs font-medium text-slate-600">校园绿色循环进行中</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-card border border-white/70 bg-gradient-to-br from-brand to-emerald-500 p-4 text-white shadow-soft fade-in">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <p class="text-sm/6 text-white/85">我的当前积分</p>
+              <div class="mt-1 flex items-end gap-2">
+                <span class="text-4xl font-semibold tracking-tight">1,280</span>
+                <span class="pb-1 text-sm font-medium text-white/85">points</span>
+              </div>
+              <p class="mt-2 text-sm text-white/80">距离「环保达人徽章」还差 <span class="font-semibold text-white">120</span> 分</p>
+            </div>
+            <div class="flex gap-2">
+              <button id="openRecycle" class="rounded-pill border border-white/30 bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur">
+                去回收
+              </button>
+              <button id="openMall" class="rounded-pill border border-white/30 bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur">
+                去兑换
+              </button>
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-3 gap-3">
+            <div class="rounded-card bg-white/12 p-3 backdrop-blur-sm">
+              <p class="text-xs text-white/70">本月回收</p>
+              <p class="mt-1 text-lg font-semibold">12 件</p>
+            </div>
+            <div class="rounded-card bg-white/12 p-3 backdrop-blur-sm">
+              <p class="text-xs text-white/70">减碳贡献</p>
+              <p class="mt-1 text-lg font-semibold">9.6 kg</p>
+            </div>
+            <div class="rounded-card bg-white/12 p-3 backdrop-blur-sm">
+              <p class="text-xs text-white/70">兑换成功</p>
+              <p class="mt-1 text-lg font-semibold">6 次</p>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="mb-2 flex items-center justify-between text-xs text-white/80">
+              <span>环保进度</span>
+              <span>82%</span>
+            </div>
+            <div class="h-2 overflow-hidden rounded-full bg-white/20">
+              <div class="h-full w-[82%] rounded-full bg-white"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-1 js-product-card" data-product="0">
+            <div class="flex items-center justify-between">
+              <span class="rounded-pill bg-mint px-2.5 py-1 text-xs font-medium text-brand">环保贡献</span>
+              <svg class="h-5 w-5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 3c3.5 2 6 5 6 9a6 6 0 0 1-12 0c0-4 2.5-7 6-9Z"/>
+                <path d="M12 8v11"/>
+                <path d="M9 16c1-1 2.2-1.5 3-1.5s2 .5 3 1.5"/>
+              </svg>
+            </div>
+            <p class="mt-3 text-2xl font-semibold text-ink">258 kg</p>
+            <p class="mt-1 text-sm text-slate-500">累计资源循环量</p>
+          </div>
+          <div class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-2">
+            <div class="flex items-center justify-between">
+              <span class="rounded-pill bg-amber-50 px-2.5 py-1 text-xs font-medium text-accent">本周热度</span>
+              <svg class="h-5 w-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 2s4 3 4 7a4 4 0 1 1-8 0c0-2.5 1-4.5 4-7Z"/>
+                <path d="M7 14c1.2-1.3 2.7-2 5-2s3.8.7 5 2"/>
+              </svg>
+            </div>
+            <p class="mt-3 text-2xl font-semibold text-ink">97%</p>
+            <p class="mt-1 text-sm text-slate-500">热门回收分类转化率</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 pt-5">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-ink">热门回收分类</h2>
+        <button class="text-sm font-medium text-brand">查看全部</button>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-1">
+          <div class="flex items-center justify-between">
+            <div class="rounded-2xl bg-mint p-3 text-brand">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M7 3h10l1 4H6l1-4Z"/>
+                <path d="M6 7h12l-1 14H7L6 7Z"/>
+                <path d="M9 11h6"/>
+              </svg>
+            </div>
+            <span class="rounded-pill bg-brand/10 px-2 py-1 text-xs font-semibold text-brand">+50分</span>
+          </div>
+          <h3 class="mt-3 text-base font-semibold">旧教材 / 考研资料</h3>
+          <p class="mt-1 text-sm text-slate-500">学期末清仓，快速上传审核</p>
+        </article>
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-2">
+          <div class="flex items-center justify-between">
+            <div class="rounded-2xl bg-mint p-3 text-brand">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M7 4h10l1 4H6l1-4Z"/>
+                <path d="M6 8h12l-1 12H7L6 8Z"/>
+                <path d="M10 12h4"/>
+              </svg>
+            </div>
+            <span class="rounded-pill bg-brand/10 px-2 py-1 text-xs font-semibold text-brand">+30分</span>
+          </div>
+          <h3 class="mt-3 text-base font-semibold">旧衣物 / 箱包</h3>
+          <p class="mt-1 text-sm text-slate-500">校园集中回收，统一处理</p>
+        </article>
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-3">
+          <div class="flex items-center justify-between">
+            <div class="rounded-2xl bg-mint p-3 text-brand">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 9h16"/>
+                <path d="M6 9v9h12V9"/>
+                <path d="M9 9V7a3 3 0 0 1 6 0v2"/>
+              </svg>
+            </div>
+            <span class="rounded-pill bg-brand/10 px-2 py-1 text-xs font-semibold text-brand">+80分</span>
+          </div>
+          <h3 class="mt-3 text-base font-semibold">小家电 / 数码</h3>
+          <p class="mt-1 text-sm text-slate-500">高价值物品优先上门回收</p>
+        </article>
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-4">
+          <div class="flex items-center justify-between">
+            <div class="rounded-2xl bg-mint p-3 text-brand">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 4v16"/>
+                <path d="M5 12h14"/>
+                <path d="M9 7a3 3 0 0 1 6 0v10a3 3 0 0 1-6 0V7Z"/>
+              </svg>
+            </div>
+            <span class="rounded-pill bg-brand/10 px-2 py-1 text-xs font-semibold text-brand">签到加分</span>
+          </div>
+          <h3 class="mt-3 text-base font-semibold">每日签到 / 邀请好友</h3>
+          <p class="mt-1 text-sm text-slate-500">轻量任务，持续累计积分</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="px-4 pt-6">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-ink">积分商城推荐</h2>
+        <button class="rounded-pill border border-brand/30 bg-white px-3 py-1.5 text-sm font-medium text-brand">我的积分：1280</button>
+      </div>
+      <div class="space-y-3">
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-1">
+          <div class="flex gap-4">
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-mint to-white text-brand">
+              <svg class="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M6 4h12l-1.5 16h-9L6 4Z"/>
+                <path d="M9 8h6"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-semibold">环保笔记本礼盒</h3>
+                  <p class="mt-1 text-sm text-slate-500">学习用品 · 限量补货</p>
+                </div>
+                <span class="rounded-pill bg-amber-50 px-2.5 py-1 text-xs font-semibold text-accent">320分</span>
+              </div>
+              <div class="mt-3 flex items-center gap-2">
+                <button class="rounded-pill bg-brand px-4 py-2 text-sm font-semibold text-white js-open-product">立即兑换</button>
+                <button class="rounded-pill border border-brand px-4 py-2 text-sm font-semibold text-brand js-open-product">查看详情</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-2 js-product-card" data-product="1">
+          <div class="flex gap-4">
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-50 to-white text-accent">
+              <svg class="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M6 6h12v12H6z"/>
+                <path d="M9 6V4h6v2"/>
+                <path d="M8 10h8"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-semibold">校园打印券 50元</h3>
+                  <p class="mt-1 text-sm text-slate-500">校园服务 · 热门兑换</p>
+                </div>
+                <span class="rounded-pill bg-amber-50 px-2.5 py-1 text-xs font-semibold text-accent">500分</span>
+              </div>
+              <div class="mt-3 flex items-center gap-2">
+                <button class="rounded-pill bg-brand px-4 py-2 text-sm font-semibold text-white js-open-product">立即兑换</button>
+                <button class="rounded-pill border border-brand px-4 py-2 text-sm font-semibold text-brand js-open-product">库存充足</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card fade-in delay-3 js-product-card" data-product="2">
+          <div class="flex gap-4">
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-mint to-emerald-50 text-brand">
+              <svg class="h-9 w-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 3c4 2 7 5 7 9a7 7 0 0 1-14 0c0-4 3-7 7-9Z"/>
+                <path d="M12 8v8"/>
+                <path d="M9 12h6"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="text-base font-semibold">环保帆布袋</h3>
+                  <p class="mt-1 text-sm text-slate-500">环保周边 · 新品推荐</p>
+                </div>
+                <span class="rounded-pill bg-amber-50 px-2.5 py-1 text-xs font-semibold text-accent">180分</span>
+              </div>
+              <div class="mt-3 flex items-center gap-2">
+                <button class="rounded-pill bg-brand px-4 py-2 text-sm font-semibold text-white js-open-product">立即兑换</button>
+                <button class="rounded-pill border border-brand px-4 py-2 text-sm font-semibold text-brand js-open-product">限量 24 件</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="px-4 pt-6">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-ink">环保活动 & 排行榜</h2>
+        <button class="text-sm font-medium text-brand">活动中心</button>
+      </div>
+      <div class="grid gap-3">
+        <article class="rounded-card border border-white/70 bg-gradient-to-br from-white to-mint/60 p-4 shadow-card">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="rounded-pill bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent">毕业季回收活动</span>
+              <h3 class="mt-3 text-base font-semibold text-ink">宿舍楼回收点开放中</h3>
+              <p class="mt-1 text-sm text-slate-500">上传教材、衣物、小家电，审核后自动发放积分。</p>
+            </div>
+            <button class="rounded-pill bg-brand px-4 py-2 text-sm font-semibold text-white">报名参加</button>
+          </div>
+        </article>
+
+        <article class="rounded-card border border-white/70 bg-white p-4 shadow-card">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-semibold">今日环保达人榜</h3>
+            <span class="text-sm text-slate-500">Top 5</span>
+          </div>
+          <div class="mt-3 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-sm font-semibold text-white">1</span>
+              <div class="flex-1">
+                <p class="font-medium">北苑 23 级张同学</p>
+                <p class="text-xs text-slate-500">教材回收 18 件</p>
+              </div>
+              <span class="text-sm font-semibold text-accent">980 分</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand/80 text-sm font-semibold text-white">2</span>
+              <div class="flex-1">
+                <p class="font-medium">南区李同学</p>
+                <p class="text-xs text-slate-500">旧衣物回收 12 件</p>
+              </div>
+              <span class="text-sm font-semibold text-accent">920 分</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand/60 text-sm font-semibold text-white">3</span>
+              <div class="flex-1">
+                <p class="font-medium">研究生王同学</p>
+                <p class="text-xs text-slate-500">考研资料共享 9 份</p>
+              </div>
+              <span class="text-sm font-semibold text-accent">870 分</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="px-4 pt-6">
+      <div class="rounded-card border border-white/70 bg-white p-4 shadow-card">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-ink">回收流程</h2>
+          <span class="rounded-pill bg-mint px-2.5 py-1 text-xs font-semibold text-brand">核心闭环</span>
+        </div>
+        <div class="mt-4 grid grid-cols-4 gap-2 text-center text-xs">
+          <div class="rounded-card bg-mint/70 p-3">
+            <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand">
+              1
+            </div>
+            上传闲置物品
+          </div>
+          <div class="rounded-card bg-mint/70 p-3">
+            <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand">
+              2
+            </div>
+            平台审核
+          </div>
+          <div class="rounded-card bg-mint/70 p-3">
+            <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand">
+              3
+            </div>
+            回收发积分
+          </div>
+          <div class="rounded-card bg-mint/70 p-3">
+            <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand">
+              4
+            </div>
+            商城兑换
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="fixed inset-x-0 bottom-0 z-20 border-t border-white/60 bg-white/85 glass">
+    <div class="mx-auto grid max-w-[430px] grid-cols-5 px-2 py-2 text-[11px] text-slate-500">
+      <button class="tab-active flex flex-col items-center gap-1 rounded-2xl py-2 font-medium">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M4 11.5 12 5l8 6.5"/>
+          <path d="M6.5 10.5V19h11V10.5"/>
+          <path d="M10 19v-5h4v5"/>
+        </svg>
+        首页
+      </button>
+      <button class="flex flex-col items-center gap-1 rounded-2xl py-2 font-medium">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M7.5 7.5 9 4h4.5"/>
+          <path d="M16.5 7.5 15 4h-4.5"/>
+          <path d="M6 10.5 4.5 14 7 18"/>
+          <path d="M18 10.5 19.5 14 17 18"/>
+          <path d="M8 12.5a4.5 4.5 0 0 1 8 0"/>
+          <path d="M16 11.5 15.5 13h-2"/>
+          <path d="M8 15.5 8.5 14h2"/>
+        </svg>
+        回收
+      </button>
+      <button class="flex flex-col items-center gap-1 rounded-2xl py-2 font-medium">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M5 7h14l-1.5 11H6.5L5 7Z"/>
+          <path d="M9 7V5h6v2"/>
+          <path d="M9 11h6"/>
+        </svg>
+        商城
+      </button>
+      <button class="flex flex-col items-center gap-1 rounded-2xl py-2 font-medium">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 4v5"/>
+          <path d="M12 15v5"/>
+          <path d="M4 12h5"/>
+          <path d="M15 12h5"/>
+          <path d="M7.5 7.5 11 11"/>
+          <path d="M13 13l3.5 3.5"/>
+        </svg>
+        活动
+      </button>
+      <button class="flex flex-col items-center gap-1 rounded-2xl py-2 font-medium">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
+          <path d="M5 20a7 7 0 0 1 14 0"/>
+        </svg>
+        我的
+      </button>
+    </div>
+  </nav>
+
+  <div id="recycleModal" class="fixed inset-0 z-30 hidden items-center justify-center bg-slate-950/40 px-4">
+    <div class="w-full max-w-[420px] rounded-card bg-white p-5 shadow-card">
+      <div class="flex items-start justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-ink">快速回收表单</h3>
+          <p class="mt-1 text-sm text-slate-500">提交后进入审核队列，审核通过将自动发放积分。</p>
+        </div>
+        <button id="closeRecycle" class="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-500">关闭</button>
+      </div>
+      <div class="mt-4 space-y-3">
+        <input id="itemName" class="w-full rounded-card border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand" placeholder="物品名称，例如：高数教材" />
+        <select id="itemCategory" class="w-full rounded-card border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand">
+          <option>教材</option>
+          <option>学习资料</option>
+          <option>衣物</option>
+          <option>小家电</option>
+          <option>生活用品</option>
+        </select>
+        <select id="itemCondition" class="w-full rounded-card border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand">
+          <option>九成新</option>
+          <option>八成新</option>
+          <option>可使用</option>
+          <option>轻微磨损</option>
+        </select>
+        <input id="itemCampus" class="w-full rounded-card border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand" placeholder="取件点，例如：南区宿舍" />
+        <textarea id="itemNote" class="min-h-28 w-full rounded-card border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand" placeholder="补充说明、数量、上门时间"></textarea>
+      </div>
+      <div class="mt-4 flex gap-3">
+        <button id="submitRecycle" class="btn-secondary flex-1">提交审核</button>
+        <button id="quickCloseRecycle" class="btn-primary flex-1">确认提交</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="productSheet" class="fixed inset-0 z-30 hidden bg-slate-950/35">
+    <div class="absolute inset-0" id="closeProductMask"></div>
+    <div class="absolute inset-x-0 bottom-0 rounded-t-[28px] bg-white p-5 shadow-card">
+      <div class="mx-auto mb-3 h-1.5 w-12 rounded-full bg-slate-200"></div>
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h3 id="sheetTitle" class="text-lg font-semibold text-ink">环保笔记本礼盒</h3>
+          <p id="sheetDesc" class="mt-1 text-sm text-slate-500">学习用品 · 限量补货</p>
+        </div>
+        <div id="sheetPoint" class="rounded-pill bg-amber-50 px-3 py-1.5 text-sm font-semibold text-accent">320分</div>
+      </div>
+      <div class="mt-4 rounded-card bg-slate-50 p-4">
+        <p class="text-sm font-semibold text-ink">商品说明</p>
+        <p id="sheetDetail" class="mt-2 text-sm leading-6 text-slate-600">再生纸笔记本 + 环保书签 + 可降解便签套装，适合日常学习和送礼。</p>
+        <div class="mt-4 flex items-center justify-between text-sm text-slate-500">
+          <span>库存</span>
+          <span id="sheetStock">18 件</span>
+        </div>
+      </div>
+      <div class="mt-4 flex gap-3">
+        <button id="cancelExchange" class="btn-secondary flex-1">取消</button>
+        <button id="confirmExchange" class="btn-primary flex-1">确认兑换</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="successModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-950/45 px-4">
+    <div class="w-full max-w-[420px] rounded-card bg-white p-5 shadow-card">
+      <h3 class="text-lg font-semibold text-ink">兑换成功</h3>
+      <p class="mt-2 text-sm leading-6 text-slate-500">订单已生成，商品会在 1-3 个工作日内发放到你的校园账户。</p>
+      <div class="mt-4 rounded-card bg-mint p-4">
+        <p id="successName" class="font-semibold text-ink">环保笔记本礼盒</p>
+        <p id="successPoint" class="mt-1 text-sm text-slate-600">已扣除 320 积分</p>
+      </div>
+      <div class="mt-4 flex gap-3">
+        <button id="closeSuccess" class="btn-secondary flex-1">查看订单</button>
+        <button id="closeSuccess2" class="btn-primary flex-1">继续逛逛</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      {
+        name: '环保笔记本礼盒',
+        desc: '学习用品 · 限量补货',
+        points: '320分',
+        detail: '再生纸笔记本 + 环保书签 + 可降解便签套装，适合日常学习和送礼。',
+        stock: '18 件'
+      },
+      {
+        name: '校园打印券 50元',
+        desc: '校园服务 · 热门兑换',
+        points: '500分',
+        detail: '支持校内打印店通用，适合论文、简历、课程资料打印。',
+        stock: '36 件'
+      },
+      {
+        name: '环保帆布袋',
+        desc: '环保周边 · 新品推荐',
+        points: '180分',
+        detail: '加厚帆布材质，适合上课、采购、日常通勤使用。',
+        stock: '24 件'
+      }
+    ];
+
+    const recycleModal = document.getElementById('recycleModal');
+    const productSheet = document.getElementById('productSheet');
+    const successModal = document.getElementById('successModal');
+    const itemName = document.getElementById('itemName');
+    const itemNote = document.getElementById('itemNote');
+    const sheetTitle = document.getElementById('sheetTitle');
+    const sheetDesc = document.getElementById('sheetDesc');
+    const sheetPoint = document.getElementById('sheetPoint');
+    const sheetDetail = document.getElementById('sheetDetail');
+    const sheetStock = document.getElementById('sheetStock');
+    const successName = document.getElementById('successName');
+    const successPoint = document.getElementById('successPoint');
+    let currentProduct = products[0];
+
+    const openModal = (el) => {
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeModal = (el) => {
+      el.classList.add('hidden');
+      el.classList.remove('flex');
+      document.body.style.overflow = '';
+    };
+
+    document.getElementById('openRecycle').addEventListener('click', () => openModal(recycleModal));
+    document.getElementById('openMall').addEventListener('click', () => {
+      currentProduct = products[0];
+      sheetTitle.textContent = currentProduct.name;
+      sheetDesc.textContent = currentProduct.desc;
+      sheetPoint.textContent = currentProduct.points;
+      sheetDetail.textContent = currentProduct.detail;
+      sheetStock.textContent = currentProduct.stock;
+      openModal(productSheet);
+    });
+    document.getElementById('closeRecycle').addEventListener('click', () => closeModal(recycleModal));
+    document.getElementById('quickCloseRecycle').addEventListener('click', () => {
+      if (!itemName.value.trim() || !itemNote.value.trim()) {
+        alert('请先补全物品名称和补充说明');
+        return;
+      }
+      closeModal(recycleModal);
+      alert('提交成功，审核通过后会自动发放积分。');
+    });
+    document.getElementById('submitRecycle').addEventListener('click', () => {
+      if (!itemName.value.trim() || !itemNote.value.trim()) {
+        alert('请先补全物品名称和补充说明');
+        return;
+      }
+      closeModal(recycleModal);
+      alert('提交成功，审核通过后会自动发放积分。');
+    });
+    document.getElementById('closeProductMask').addEventListener('click', () => closeModal(productSheet));
+    document.getElementById('cancelExchange').addEventListener('click', () => closeModal(productSheet));
+    document.getElementById('confirmExchange').addEventListener('click', () => {
+      closeModal(productSheet);
+      successName.textContent = currentProduct.name;
+      successPoint.textContent = '已扣除 ' + currentProduct.points;
+      openModal(successModal);
+    });
+    document.getElementById('closeSuccess').addEventListener('click', () => closeModal(successModal));
+    document.getElementById('closeSuccess2').addEventListener('click', () => closeModal(successModal));
+
+    document.querySelectorAll('.js-product-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        currentProduct = products[Number(card.dataset.product)];
+        sheetTitle.textContent = currentProduct.name;
+        sheetDesc.textContent = currentProduct.desc;
+        sheetPoint.textContent = currentProduct.points;
+        sheetDetail.textContent = currentProduct.detail;
+        sheetStock.textContent = currentProduct.stock;
+        openModal(productSheet);
+      });
+    });
+    document.querySelectorAll('.js-open-product').forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const card = event.currentTarget.closest('.js-product-card');
+        if (!card) return;
+        currentProduct = products[Number(card.dataset.product)];
+        sheetTitle.textContent = currentProduct.name;
+        sheetDesc.textContent = currentProduct.desc;
+        sheetPoint.textContent = currentProduct.points;
+        sheetDetail.textContent = currentProduct.detail;
+        sheetStock.textContent = currentProduct.stock;
+        openModal(productSheet);
+      });
+    });
+  </script>
+</body>
+</html>
